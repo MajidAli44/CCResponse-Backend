@@ -19,8 +19,11 @@ RUN pip install -r requirements.txt
 # copy entrypoint.sh
 COPY ./entrypoint.sh .
 
+# make entrypoint.sh executable
+RUN chmod +x /usr/src/app/entrypoint.sh
+
 # copy project
 COPY . .
 
 # run entrypoint.sh
-ENTRYPOINT ["D:\xampp-81\htdocs\digitusrain\ccresponse-gitlab\back\entrypoint.sh"]
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]

@@ -21,3 +21,4 @@ drf-writable-nested==0.7.0
 docusign-esign==3.25.0
 twilio==8.10.3
 Pillow==10.1.0
+dj-database-url==2.1.0

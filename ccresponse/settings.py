@@ -162,12 +162,13 @@ ASGI_APPLICATION = 'ccresponse.routing.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+import dj_database_url
 
 DB = env.db()
 DB['ENGINE'] = 'django_tenants.postgresql_backend'
 
 DATABASES = {
-    'default': DB
+    'default': dj_database_url.config(default=env('DATABASE_URL'))
 }
 
 DATABASE_ROUTERS = (

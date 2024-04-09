@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+  <meta name="pdfkit-page-size" content="Legal"/>
+  <meta name="pdfkit-orientation" content="Portrait"/>
+</head>
+<body>
+<table>
+  <tr>
+    <th>Instruction date</th>
+    <th>Accident date</th>
+    <th>Client name</th>
+    <th>CC Ref</th>
+    <th>Phone number</th>
+    <th>Introducer</th>
+    <th>Provider</th>
+    <th>Tp Insurer</th>
+    <th>Instructed solicitor</th>
+  </tr>
+  {% for case in export_cases %}
+    <tr>
+      <td>{{ case.instruction_date }}</td>
+      <td>
+        {% if case.accident.accident_date %}
+          {{ case.accident.accident_date }}
+        {% else %} -/- {% endif %}
+      </td>
+      <td>
+        {% if case.client.name %}
+          {{ case.client.name }}
+        {% else %} -/- {% endif %}
+      </td>
+      <td>{{ case.cc_ref }}</td>
+      <td>
+        {% if case.client.phone_number %}
+          {{ case.client.phone_number }}
+        {% else %} -/- {% endif %}
+      </td>
+      <td>
+        {% if  case.introducer.name %}
+          {{ case.introducer.name }}
+        {% else %} -/- {% endif %}
+      </td>
+      <td>
+        {% if  case.provider.name %}
+          {{ case.provider.name }}
+        {% else %} -/- {% endif %}
+      </td>
+      <td>
+        {% if case.third_party.insurer.name %}
+          {{ case.third_party.insurer.name }}
+        {% else %} -/- {% endif %}
+      </td>
+      <td>
+        {% if case.solicitor.name %}
+          {{ case.solicitor.name }}
+        {% else %} -/- {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+</body>
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+</style>
+</html>

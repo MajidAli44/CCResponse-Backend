@@ -1,0 +1,30 @@
+from .AbstractDocumentGenerator import AbstractDocumentGenerator
+
+from .LetterHeadDocumentGenerator import LetterHeadDocumentGenerator
+from .StatementOfTruthDocumentGenerator import StatementOfTruthDocumentGenerator
+from .WitnessStatementDocumentGenerator import WitnessStatementDocumentGenerator
+from .NewClaimNotificationDocumentGenerator import NewClaimNotificationDocumentGenerator
+from .ReleaseNoteMansfieldGroupDocumentGenerator import ReleaseNoteMansfieldGroupDocumentGenerator
+from .ReleaseNoteMotorMoveUKDocumentGenerator import ReleaseNoteMotorMoveUKDocumentGenerator
+from .LetterClientOnConclusionClaimDocumentGenerator import LetterClientOnConclusionClaimDocumentGenerator
+from .VehicleExcessDueDamageDocumentGenerator import VehicleExcessDueDamageDocumentGenerator
+from .WitnessRequestingStatementDocumentGenerator import WitnessRequestingStatementDocumentGenerator
+from .NoticeRightCancelDocumentGenerator import NoticeRightCancelDocumentGenerator
+from .RepairsSatisfactionNoteDocumentGenerator import RepairsSatisfactionNoteDocumentGenerator
+from .HirePackDocumentGenerator import HirePackDocumentGenerator
+from .LetterClientPAVDocumentGenerator import LetterClientPAVDocumentGenerator
+from .NewClaimFormDocumentGenerator import NewClaimFormDocumentGenerator
+from .PaymentPackDocumentGenerator import PaymentPackDocumentGenerator
+from .RepairInvoiceDocumentGenerator import RepairInvoiceDocumentGenerator
+
+__all__ = [
+    'AbstractDocumentGenerator',
+
+    'LetterHeadDocumentGenerator', 'StatementOfTruthDocumentGenerator', 'WitnessStatementDocumentGenerator',
+    'NewClaimNotificationDocumentGenerator', 'ReleaseNoteMansfieldGroupDocumentGenerator',
+    'ReleaseNoteMotorMoveUKDocumentGenerator', 'LetterClientOnConclusionClaimDocumentGenerator',
+    'VehicleExcessDueDamageDocumentGenerator', 'WitnessRequestingStatementDocumentGenerator',
+    'NoticeRightCancelDocumentGenerator', 'RepairsSatisfactionNoteDocumentGenerator',
+    'HirePackDocumentGenerator', 'LetterClientPAVDocumentGenerator', 'NewClaimFormDocumentGenerator',
+    'PaymentPackDocumentGenerator', 'RepairInvoiceDocumentGenerator'
+]

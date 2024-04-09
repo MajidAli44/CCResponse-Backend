@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres
+    hostname: postgres-database
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=postgres-user
+      - POSTGRES_PASSWORD=postgres-password
+      - POSTGRES_DATABASE=postgress-database
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    ports:
+      - '5555:80'
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=alexey@levels.digital
+      - PGADMIN_DEFAULT_PASSWORD=password
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis-data:/opt/redis/data
+
+volumes:
+  postgres:
+  redis-data:

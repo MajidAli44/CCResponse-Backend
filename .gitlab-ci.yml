@@ -1,0 +1,139 @@
+image: python:3.8.7-alpine
+
+variables:
+  POSTGRES_HOST_AUTH_METHOD: trust
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
+services:
+  - docker:19.03.12-dind
+
+cache:
+  paths:
+    - .cache/pip
+
+stages:
+  - test
+  - build
+  - deploy
+
+.prepare-environment-file: &prepare-environment-file
+  - apk update && apk add gettext
+  - envsubst < .env.template > .env
+
+.pull-web: &pull-web
+  - docker pull $WEB_IMAGE || true
+
+.build-web: &build-web
+  - docker build -f Dockerfile.prod --cache-from=$WEB_IMAGE -t $WEB_IMAGE --build-arg BUILDKIT_INLINE_CACHE=1 .
+  - docker-compose -f docker-compose.prod.yml build --build-arg BUILDKIT_INLINE_CACHE=1 web
+
+.test-project: &test-project
+  - docker-compose -f docker-compose.prod.yml up -d db
+  - docker-compose -f docker-compose.prod.yml run web python manage.py test
+  # - docker-compose -f docker-compose.prod.yml run web pylint_runner -d R -d C
+
+.push-web: &push-web
+  - docker login -u $DOCKER_CCRESPONSE_USER -p $DOCKER_CCRESPONSE_TOKEN
+  - docker push $WEB_IMAGE
+
+.deploy-project: &deploy-project
+  - apk add --no-cache openssh-client bash
+  - mkdir -p ~/.ssh
+  - echo "$PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+  - chmod 700 ~/.ssh/id_rsa
+  - eval "$(ssh-agent -s)"
+  - ssh-add ~/.ssh/id_rsa
+  - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
+  - scp -o StrictHostKeyChecking=no -r ./.env root@$EC2_PUBLIC_IP_ADDRESS:/home/root/ccresponse-crm/
+  - ssh -o StrictHostKeyChecking=no root@$EC2_PUBLIC_IP_ADDRESS "cd /home/root/ccresponse-crm; docker login -u $DOCKER_CCRESPONSE_USER -p $DOCKER_CCRESPONSE_TOKEN; ssh-agent -s > agent.sh; chmod +x agent.sh; sh agent.sh; ssh-add ~/.ssh/id_rsa; ( cd ccresponse-docker && git pull && cd ../ ) || git clone git@gitlab.com:ccresponse/ccresponse-docker.git -b feature/add_redis_worker; cp -r ccresponse-docker/* ./; chmod +x step-1-prepare-for-letsencrypt.sh step-2-letsencrypt.sh step-3-live.sh;"
+  - ssh -o StrictHostKeyChecking=no root@$EC2_PUBLIC_IP_ADDRESS "cd /home/root/ccresponse-crm && sudo ./step-1-prepare-for-letsencrypt.sh;"
+  - ssh -o StrictHostKeyChecking=no root@$EC2_PUBLIC_IP_ADDRESS "cd /home/root/ccresponse-crm && sudo ./step-2-letsencrypt.sh;"
+  - ssh -o StrictHostKeyChecking=no root@$EC2_PUBLIC_IP_ADDRESS "cd /home/root/ccresponse-crm && sudo ./step-3-live.sh;"
+
+before_script:
+  - apk add --no-cache openssh-client bash
+  - docker login -u $DOCKER_CCRESPONSE_USER -p $DOCKER_CCRESPONSE_TOKEN
+
+code:
+  stage: test
+  resource_group: DEVELOP
+  tags:
+    - ccresponse-crm
+  image:
+    name: docker/compose:latest
+    entrypoint: [ "" ]
+  before_script:
+    - *pull-web
+  environment:
+    name: TEST
+  script:
+    - *prepare-environment-file
+    - *build-web
+    - *test-project
+  only:
+    - merge_requests
+
+develop:
+  stage: deploy
+  resource_group: DEVELOP
+  tags:
+    - ccresponse-crm
+  image:
+    name: docker/compose:latest
+    entrypoint: [ "" ]
+  before_script:
+    - *pull-web
+  script:
+    - *prepare-environment-file
+    - *build-web
+    - *push-web
+    - *deploy-project
+  environment:
+    name: DEVELOP
+  only:
+    - develop
+
+staging:
+  stage: deploy
+  resource_group: STAGING
+  tags:
+    - ccresponse-crm
+  image:
+    name: docker/compose:latest
+    entrypoint: [ "" ]
+  before_script:
+    - *pull-web
+  script:
+    - *prepare-environment-file
+    - *build-web
+    - *push-web
+    - *deploy-project
+  environment:
+    name: STAGING
+  only:
+    - master
+
+production:
+  stage: deploy
+  resource_group: PROD
+  tags:
+    - ccresponse-crm
+  image:
+    name: docker/compose:latest
+    entrypoint: [ "" ]
+  before_script:
+    - *pull-web
+
+  script:
+    - *prepare-environment-file
+    - *build-web
+    - *push-web
+    - *deploy-project
+  environment:
+    name: PROD
+  only:
+    - prod

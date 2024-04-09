@@ -1,0 +1,37 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+Django = "*"
+psycopg2-binary = "*"
+django-environ = "*"
+gunicorn = "*"
+django-choices = "*"
+boto3 = "*"
+pillow = "*"
+django-storages = "*"
+djangorestframework-simplejwt = "*"
+django-tenants = "==3.5.0"
+APScheduler = "==3.10.1"
+drf-yasg = "*"
+django-cors-headers = "*"
+docxtpl = "*"
+drf-writable-nested = "*"
+django-filter = "*"
+openpyxl = "==3.0.7"
+pdfkit = "*"
+huey = "*"
+redis = "*"
+twilio = "<6.51.0"
+phonenumbers = "*"
+docusign-esign = {editable = true, git = "https://github.com/dennisdejong1995/docusign-esign-python-client.git"}
+
+[dev-packages]
+pylint = "*"
+pylint-runner = "*"
+pylint-django = "*"
+
+[requires]
+python_version = "3.8"

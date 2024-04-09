@@ -1,0 +1,37 @@
+from .DocumentSerializer import DocumentSerializer
+from .DocumentSelectSerializer import DocumentSelectSerializer
+from .DocumentUploadDownloadSerializer import DocumentUploadDownloadSerializer
+from .DocumentDownloadResponseSerializer import DocumentDownloadResponseSerializer
+from .DocumentSignatureCreateSerializer import DocumentSignatureCreateSerializer
+
+
+from .LetterHeadDocumentSerializer import LetterHeadDocumentSerializer
+from .StatementOfTruthDocumentSerializer import StatementOfTruthDocumentSerializer
+from .WitnessStatementDocumentSerializer import WitnessStatementDocumentSerializer
+from .NewClaimNotificationDocumentSerializer import NewClaimNotificationDocumentSerializer
+from .ReleaseNoteMansfieldGroupDocumentSerializer import ReleaseNoteMansfieldGroupDocumentSerializer
+from .ReleaseNoteMotorMoveUKDocumentSerializer import ReleaseNoteMotorMoveUKDocumentSerializer
+from .LetterClientOnConclusionClaimDocumentSerializer import LetterClientOnConclusionClaimDocumentSerializer
+from .VehicleExcessDueDamageDocumentSerializer import VehicleExcessDueDamageDocumentSerializer
+from .WitnessRequestingStatementDocumentSerializer import WitnessRequestingStatementDocumentSerializer
+from .NoticeRightCancelDocumentSerializer import NoticeRightCancelDocumentSerializer
+from .RepairsSatisfactionNoteDocumentSerializer import RepairsSatisfactionNoteDocumentSerializer
+from .HirePackDocumentSerializer import HirePackDocumentSerializer
+from .LetterClientPAVDocumentSerializer import LetterClientPAVDocumentSerializer
+from .NewClaimFormDocumentSerializer import NewClaimFormDocumentSerializer
+from .PaymentPackDocumentSerializer import PaymentPackDocumentSerializer
+from .RepairInvoiceDocumentSerializer import RepairInvoiceDocumentSerializer
+
+__all__ = [
+    'DocumentSerializer', 'DocumentSelectSerializer',
+    'DocumentUploadDownloadSerializer', 'DocumentDownloadResponseSerializer',
+    'DocumentSignatureCreateSerializer',
+
+    'LetterHeadDocumentSerializer', 'StatementOfTruthDocumentSerializer', 'WitnessStatementDocumentSerializer',
+    'NewClaimNotificationDocumentSerializer', 'ReleaseNoteMansfieldGroupDocumentSerializer',
+    'ReleaseNoteMotorMoveUKDocumentSerializer', 'LetterClientOnConclusionClaimDocumentSerializer',
+    'VehicleExcessDueDamageDocumentSerializer', 'WitnessRequestingStatementDocumentSerializer',
+    'NoticeRightCancelDocumentSerializer', 'RepairsSatisfactionNoteDocumentSerializer',
+    'HirePackDocumentSerializer', 'LetterClientPAVDocumentSerializer', 'NewClaimFormDocumentSerializer',
+    'PaymentPackDocumentSerializer', 'RepairInvoiceDocumentSerializer'
+]

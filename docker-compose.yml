@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - ../postgres_data/:/var/lib/postgresql/data/
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+  web:
+    &web
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./:/usr/src/app/
+    ports:
+      - 8000:8000
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  web_worker:
+    <<: *web
+    ports:
+      - 8008:8008
+    command: python manage.py run_huey
+
+  web_socket:
+   <<: *web
+   ports:
+     - 5005:5005
+   command: daphne -b 0.0.0.0 -p 5005 ccresponse.routing:application
+
+  redis:
+    image: redis:alpine

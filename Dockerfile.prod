@@ -1,0 +1,34 @@
+# pull official base image
+FROM python:3.8-slim-buster
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 HOME=/home/app APP_HOME=/home/app/web
+
+# create the app user && create the appropriate directories
+RUN addgroup --system app && adduser --system --ingroup app app && mkdir -p $APP_HOME/staticfiles
+
+WORKDIR $APP_HOME
+
+# install dependencies
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install --no-install-recommends build-essential python3-dev libpq-dev libxml2-dev \
+libxslt-dev libffi-dev musl-dev openssl curl libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev \
+libopenjp2.7-dev libtiff-dev tk tcl netcat wkhtmltopdf git
+
+# copy Pipfile if changed and install new dependencies
+COPY ./Pipfile ./Pipfile.lock ./requirements.txt ./
+RUN pip install --upgrade pip pipenv
+RUN pipenv install --system --deploy --ignore-pipfile --dev
+RUN pip install -r requirements.txt
+
+# copy project
+COPY . $APP_HOME
+
+# chown all the files to the app user
+RUN chown -R app:app $APP_HOME
+
+# change to the app user
+USER app
+
+# run entrypoint.prod.sh
+ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]

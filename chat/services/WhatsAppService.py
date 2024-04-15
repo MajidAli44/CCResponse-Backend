@@ -11,8 +11,6 @@ class WhatsAppService:
     }
 
     def __init__(self, twilio_account_sid: str, twilio_auth_token: str):
-        print("token is---",twilio_auth_token)
-        print("account SID---",twilio_account_sid)
         self.twilio_account_sid = 'AC885dad3cbcf6015eefa3c4237b28b970'
         self.twilio_auth_token = '18464584404f8e0ac49861e857e57a7e'
 

@@ -168,7 +168,12 @@ DB = env.db()
 DB['ENGINE'] = 'django_tenants.postgresql_backend'
 
 DATABASES = {
-    'default': dj_database_url.config(default=env('DATABASE_URL'))
+        'ENGINE': 'django_tenants.postgresql_backend',
+        'NAME': '',
+        'USER': 'your_database_user',
+        'PASSWORD': 'your_database_password',
+        'HOST': 'your_database_host',
+        'PORT': 'your_database_port',
 }
 
 DATABASE_ROUTERS = (
